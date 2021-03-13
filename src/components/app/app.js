@@ -7,6 +7,7 @@ import SearchPanel from "../search-panel";
 import PostStatusFilter from "../post-status-filter";
 import PostListItem from "../post-list-item/post-list-item";
 import PostList from "../post-list";
+import DownloadFromFetch from "../download-from-fetch";
 import './app.css';
 
 
@@ -34,6 +35,7 @@ export default class App extends Component{
         this.onUpdateSearch = this.onUpdateSearch.bind(this);
         this.onFilterSelect = this.onFilterSelect.bind(this);
         this.onEdit = this.onEdit.bind(this);
+        this.downloadItem = this.downloadItem.bind(this);
 
         this.maxId = 4;
 
@@ -92,27 +94,10 @@ export default class App extends Component{
     }
 
     addItem(body){
-        // const newItem = {
-        //     label: body,
-        //     important: false,
-        //     id: this.maxId++,
-        // }
-        // this.setState(({data}) => {
-        //         const newArr = [...data, newItem];
-        //         return{
-        //             data: newArr
-        //         }
-        //     }
-        // );
-let newItem = {}
-fetch('https://swapi.dev/api/people/')
-    .then(response => response.json())
-    .then((data) => {
-        newItem = {
-            label: data.results[this.maxId++].name,
+        const newItem = {
+            label: body,
             important: false,
-            like: false,
-            id: this.maxId++
+            id: this.maxId++,
         }
         this.setState(({data}) => {
                 const newArr = [...data, newItem];
@@ -121,8 +106,10 @@ fetch('https://swapi.dev/api/people/')
                 }
             }
         );
-    })
     }
+
+
+
 
     searchPost(items, term){
         if (term.length === 0){
@@ -176,7 +163,26 @@ fetch('https://swapi.dev/api/people/')
             }
         })
     }
-
+    downloadItem(){
+        let newItem = {}
+        fetch('https://swapi.dev/api/people/')
+            .then(response => response.json())
+            .then((data) => {
+                newItem = {
+                    label: data.results[this.maxId++].name,
+                    important: false,
+                    like: false,
+                    id: this.maxId++
+                }
+                this.setState(({data}) => {
+                        const newArr = [...data, newItem];
+                        return{
+                            data: newArr
+                        }
+                    }
+                );
+            })
+    }
 
     render() {
         const {data, term, filter} = this.state;
@@ -207,6 +213,9 @@ fetch('https://swapi.dev/api/people/')
 
                 <PostAddForm
                     onAdd={this.addItem}/>
+
+                <DownloadFromFetch
+                    onDownload={this.downloadItem}/>
             </div>
         )
     }
