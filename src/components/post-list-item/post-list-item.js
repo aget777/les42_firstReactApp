@@ -22,7 +22,7 @@ export default class  PostListItem extends Component{
         this.toggleEditForm();
     }
     render() {
-        const {label, important, like, onDelete, onToggleLiked, onToggleImportant} = this.props;
+        const {label, important, like, onDelete, onToggleLiked, onToggleImportant, onUpdateItem} = this.props;
         let className = 'app-list-item d-flex justify-content-between'
         if (important){
             className += ' important'
@@ -60,7 +60,11 @@ export default class  PostListItem extends Component{
                         onClick={this.toggleEditForm}>
                         <i className="fa fa-pencil"></i>
                     </button>
-
+                    <button
+                        className="button-download"
+                        onClick={onUpdateItem}>
+                        <i className="fa fa-refresh" aria-hidden="true"></i>
+                    </button>
                     <i className="fa fa-heart"></i>
                 </div>
             </div>

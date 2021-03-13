@@ -35,6 +35,7 @@ export default class App extends Component{
         this.onUpdateSearch = this.onUpdateSearch.bind(this);
         this.onFilterSelect = this.onFilterSelect.bind(this);
         this.onEdit = this.onEdit.bind(this);
+        this.updateItem = this.updateItem.bind(this);
         this.downloadItem = this.downloadItem.bind(this);
 
         this.maxId = 4;
@@ -163,6 +164,32 @@ export default class App extends Component{
             }
         })
     }
+    updateItem(id){
+        let newItem = {}
+        fetch('https://swapi.dev/api/people/')
+            .then(response => response.json())
+            .then((data) => {
+                newItem = {
+                    label: data.results[id].name,
+                    important: false,
+                    like: false,
+                    id: this.maxId++
+                }
+                this.setState(({data}) => {
+                        const index = data.findIndex(elem => elem.id === id);
+                        const old = data[index];
+                        const newLabel = {...old, label: newItem.label};
+                        const before = data.slice(0, index);
+                        const after = data.slice(index + 1);
+                        const newArr = [...before, newItem, ...after]
+                        // const newArr = [...data, newItem];
+                        return {
+                            data: newArr
+                        }
+                    }
+                );
+            })
+    }
     downloadItem(){
         let newItem = {}
         fetch('https://swapi.dev/api/people/')
@@ -209,7 +236,8 @@ export default class App extends Component{
                     onDelete={ this.deleteItem}
                     onToggleImportant={this.onToggleImportant}
                     onToggleLiked={this.onToggleLiked}
-                    onEdit={this.onEdit}/>
+                    onEdit={this.onEdit}
+                    onUpdateItem={this.updateItem}/>
 
                 <PostAddForm
                     onAdd={this.addItem}/>

@@ -4,7 +4,7 @@ import PostListItem from "../post-list-item";
 
 export default class PostList extends Component {
 render() {
-    const {posts, onDelete, onToggleLiked, onToggleImportant, onEdit} = this.props
+    const {posts, onDelete, onToggleLiked, onToggleImportant, onEdit, onUpdateItem} = this.props
     const elements = posts.map((item, i) => {
         const {id, ...itemProps} = item; // Отсекаем ID для отображения
         return (
@@ -15,6 +15,7 @@ render() {
                     onToggleImportant = {() => onToggleImportant(id)}
                     onToggleLiked = {() => onToggleLiked(id)}
                     onEdit = {(text) => onEdit(id, text)}
+                    onUpdateItem = {() => onUpdateItem(id)}
                     id = {i}
                 />
             </li>
