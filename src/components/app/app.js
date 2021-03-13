@@ -92,10 +92,27 @@ export default class App extends Component{
     }
 
     addItem(body){
-        const newItem = {
-            label: body,
+        // const newItem = {
+        //     label: body,
+        //     important: false,
+        //     id: this.maxId++,
+        // }
+        // this.setState(({data}) => {
+        //         const newArr = [...data, newItem];
+        //         return{
+        //             data: newArr
+        //         }
+        //     }
+        // );
+let newItem = {}
+fetch('https://swapi.dev/api/people/')
+    .then(response => response.json())
+    .then((data) => {
+        newItem = {
+            label: data.results[this.maxId++].name,
             important: false,
-            id: this.maxId++,
+            like: false,
+            id: this.maxId++
         }
         this.setState(({data}) => {
                 const newArr = [...data, newItem];
@@ -104,7 +121,7 @@ export default class App extends Component{
                 }
             }
         );
-
+    })
     }
 
     searchPost(items, term){
