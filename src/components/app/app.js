@@ -33,7 +33,7 @@ export default class App extends Component{
         this.addItem = this.addItem.bind(this);
         this.onUpdateSearch = this.onUpdateSearch.bind(this);
         this.onFilterSelect = this.onFilterSelect.bind(this);
-
+        this.onEdit = this.onEdit.bind(this);
 
         this.maxId = 4;
 
@@ -146,6 +146,21 @@ export default class App extends Component{
         this.setState({filter})
     }
 
+    onEdit(id, text){
+        this.setState( ({data}) =>{
+            const index = data.findIndex(elem => elem.id === id);
+            const old = data[index];
+            const newItem = {...old, label: text };
+            const before = data.slice(0, index);
+            const after = data.slice(index + 1);
+            const newArr = [...before, newItem, ...after]
+            return{
+                data: newArr
+            }
+        })
+    }
+
+
     render() {
         const {data, term, filter} = this.state;
 
@@ -170,7 +185,8 @@ export default class App extends Component{
                     posts={visiblePosts}
                     onDelete={ this.deleteItem}
                     onToggleImportant={this.onToggleImportant}
-                    onToggleLiked={this.onToggleLiked}/>
+                    onToggleLiked={this.onToggleLiked}
+                    onEdit={this.onEdit}/>
 
                 <PostAddForm
                     onAdd={this.addItem}/>
